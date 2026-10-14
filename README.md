@@ -12,7 +12,7 @@ Meterya App is the Flutter web interface for household energy data. It uses the 
 
 ## Release image
 
-The [release workflow](.github/workflows/release.yml) runs Flutter analysis, tests, and a web build for pull requests and commits on `main`. A version tag such as `v1.0.0` also publishes the static web image for `linux/amd64` and `linux/arm64`:
+Only a pushed version tag such as `v1.0.0` starts the [release workflow](.github/workflows/release.yml). It runs Flutter analysis and tests, builds the web app, and then publishes the static image for `linux/amd64` and `linux/arm64`:
 
 ```text
 ghcr.io/<owner>/meterya-app:v1.0.0
