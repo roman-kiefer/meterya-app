@@ -1,0 +1,9 @@
+:8080 {
+    root * /srv
+    encode zstd gzip
+    header Cache-Control "no-cache"
+    header Referrer-Policy "no-referrer"
+    header X-Content-Type-Options "nosniff"
+    try_files {path} /index.html
+    file_server
+}

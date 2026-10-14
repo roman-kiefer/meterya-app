@@ -1,0 +1,13 @@
+.dart_tool/
+.pub-cache/
+.cache/
+build/
+web/flutter.js.map
+lib/l10n/app_localizations*.dart
+.flutter-plugins-dependencies
+.vscode/
+.idea/
+.env
+*.log
+.DS_Store
+AGENTS.md
