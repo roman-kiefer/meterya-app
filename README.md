@@ -10,16 +10,6 @@ Meterya App is the Flutter web interface for household energy data. It uses the 
 - Audit history, reports, and operator backup and restore
 - Responsive layout with system, light, and dark appearance modes
 
-## Release image
-
-Only a pushed version tag such as `v1.0.0` starts the [release workflow](.github/workflows/release.yml). It runs Flutter analysis and tests, builds the web app, and then publishes the static image for `linux/amd64` and `linux/arm64`:
-
-```text
-ghcr.io/<owner>/meterya-app:v1.0.0
-```
-
-Replace `<owner>` with the lowercase GitHub repository owner. The image serves the built app on port `8080`; it contains no API credentials. The first release uses version `1.0.0+1` in `pubspec.yaml`.
-
 ## Use with Docker Compose
 
 The complete deployment Compose file will live in the proxy repository. It can reference the app image as a private service:
