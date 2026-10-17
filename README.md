@@ -12,18 +12,26 @@ Meterya App is the Flutter web interface for household energy data. It uses the 
 
 ## Use with Docker Compose
 
-The complete deployment Compose file will live in the proxy repository. It can reference the app image as a private service:
+The app image is publicly available from GHCR. No GitHub account, access token, or registry login is required to pull it. Use the `latest` tag in your deployment's Compose file:
 
 ```yaml
 services:
   web:
-    image: ghcr.io/<owner>/meterya-app:v1.0.0
+    image: ghcr.io/roman-kiefer/meterya-app:latest
     restart: unless-stopped
 ```
 
 The HTTPS proxy should send `/api/*`, `/auth/*`, and `/health/*` to the API, `/identity/*` to Keycloak, and other paths to `web:8080`. The web image serves Flutter routes such as `/profile` and `/invitations/accept` through its `index.html` fallback. Keep the browser, API, and Keycloak on the same public HTTPS origin so server-side authentication cookies work. Do not expose the web container directly to the internet.
 
-Authenticate Docker on the deployment host before pulling the private image; the GitHub credential needs `read:packages` access. The proxy repository will document the full Compose startup and configuration.
+The snippet above defines only the web service. Your complete deployment also needs the API, Keycloak, PostgreSQL, and the proxy routing described above. If the public HTTPS proxy runs on the host, publish the Compose gateway only on loopback, for example `127.0.0.1:8080:8080`.
+
+Once the full Compose configuration is in place, pull and start the services:
+
+```sh
+docker compose pull
+docker compose up -d
+docker compose ps
+```
 
 ## Languages
 
