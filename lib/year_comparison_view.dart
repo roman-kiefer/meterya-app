@@ -51,10 +51,9 @@ class _YearComparisonViewState extends State<YearComparisonView> {
     final pale = register.direction == 'EXPORT'
         ? AppColors.of(context).exportPanel
         : AppColors.of(context).table;
-    final format = DateFormat(
-      'dd.MM.',
-      Localizations.localeOf(context).toLanguageTag(),
-    );
+    final format = (l.localeName == 'de'
+        ? DateFormat('dd.MM.', l.localeName)
+        : DateFormat.Md(l.localeName));
     Widget metric(String label, String value) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,7 +109,7 @@ class _YearComparisonViewState extends State<YearComparisonView> {
                           l.historyMeanQuantityLabel,
                           stats.quantityMean == null
                               ? '—'
-                              : '${YearComparisonModel.formatQuantity(stats.quantityMean!)} ${register.unit}',
+                              : '${YearComparisonModel.formatQuantity(stats.quantityMean!, locale: l.localeName)} ${register.unit}',
                         );
                         final cost = metric(
                           widget.point.isVirtualHeat
@@ -118,7 +117,10 @@ class _YearComparisonViewState extends State<YearComparisonView> {
                               : l.historyMeanCostLabel,
                           stats.costMean == null
                               ? '—'
-                              : displayEuros(stats.costMean!),
+                              : displayEuros(
+                                  stats.costMean!,
+                                  locale: l.localeName,
+                                ),
                         );
                         final trend = YearTrendBarometer(
                           trend: HistoryTrend.window(
@@ -193,6 +195,7 @@ class _YearComparisonViewState extends State<YearComparisonView> {
                               row.year.toString(),
                               YearComparisonModel.formatQuantity(
                                 row.position!.quantity,
+                                locale: l.localeName,
                               ),
                               register.unit,
                             ),
@@ -234,7 +237,9 @@ class _YearComparisonViewState extends State<YearComparisonView> {
       register.id,
       year,
     );
-    final percent = comparison?.percent;
+    final percent = l.localeName.startsWith('en')
+        ? comparison?.percent?.replaceAll(',', '.')
+        : comparison?.percent;
     final months = comparison?.months ?? const <int>[];
     final monthFormat = DateFormat.MMM(
       Localizations.localeOf(context).toLanguageTag(),
@@ -256,7 +261,7 @@ class _YearComparisonViewState extends State<YearComparisonView> {
       message:
           '$label${percent != null && comparison!.estimated ? ' · ${l.estimatedAllocation}' : ''}',
       child: Text(
-        '${YearComparisonModel.formatQuantity(row.position!.quantity)} ${register.unit} | ${row.costCents == null ? '—' : displayEuros(row.costCents!)} | ${percent ?? '—'}',
+        '${YearComparisonModel.formatQuantity(row.position!.quantity, locale: l.localeName)} ${register.unit} | ${row.costCents == null ? '—' : displayEuros(row.costCents!, locale: l.localeName)} | ${percent ?? '—'}',
         key: ValueKey('year-values-${register.id}-$year'),
         style: TextStyle(
           color: registerAccent(register.direction, context),

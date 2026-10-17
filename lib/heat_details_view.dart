@@ -222,9 +222,14 @@ class HeatPeriodTable extends StatelessWidget {
     final color = total
         ? AppColors.of(context).heatAccent
         : AppColors.of(context).grid;
-    String quantity(String? value) =>
-        value == null ? '—' : '${displayQuantity(value)} kWh';
-    String date(String d) => DateFormat('dd.MM.yy').format(DateTime.parse(d));
+    String quantity(String? value) => value == null
+        ? '—'
+        : '${displayQuantity(value, locale: l.localeName)} kWh';
+    String date(String d) =>
+        (l.localeName == 'de'
+                ? DateFormat('dd.MM.yy', l.localeName)
+                : DateFormat.yMd(l.localeName))
+            .format(DateTime.parse(d));
     Widget cell(String value, {bool strong = false}) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 6),
       child: Text(
@@ -356,12 +361,12 @@ class _AnnualCosts extends StatelessWidget {
                     dense: true,
                     title: Text(l.heatGrid),
                     subtitle: Text(
-                      '${displayQuantity(position.quantity)} ${position.unit}',
+                      '${displayQuantity(position.quantity, locale: l.localeName)} ${position.unit}',
                     ),
                     trailing: Text(
                       position.cents == null
                           ? l.notCalculated
-                          : displayEuros(position.cents!),
+                          : displayEuros(position.cents!, locale: l.localeName),
                     ),
                   ),
                 ListTile(
@@ -370,7 +375,10 @@ class _AnnualCosts extends StatelessWidget {
                   trailing: Text(
                     summary.baseCents == null
                         ? l.notCalculated
-                        : displayEuros(summary.baseCents!),
+                        : displayEuros(
+                            summary.baseCents!,
+                            locale: l.localeName,
+                          ),
                   ),
                 ),
                 ListTile(
@@ -379,7 +387,7 @@ class _AnnualCosts extends StatelessWidget {
                   trailing: Text(
                     summary.netCents == null
                         ? l.notCalculated
-                        : displayEuros(summary.netCents!),
+                        : displayEuros(summary.netCents!, locale: l.localeName),
                   ),
                 ),
                 Padding(

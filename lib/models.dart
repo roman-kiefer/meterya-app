@@ -243,11 +243,15 @@ class ConsumptionInterval {
       );
 }
 
-String displayQuantity(String value) {
+String decimalSeparator(String locale) => locale.startsWith('en') ? '.' : ',';
+
+String displayQuantity(String value, {String locale = 'de'}) {
   final parts = value.split('.');
   if (parts.length == 1) return value;
   final fraction = parts[1].replaceFirst(RegExp(r'0+$'), '');
-  return fraction.isEmpty ? parts[0] : '${parts[0]},$fraction';
+  return fraction.isEmpty
+      ? parts[0]
+      : '${parts[0]}${decimalSeparator(locale)}$fraction';
 }
 
 String? normalizeReading(String input) {
@@ -423,15 +427,16 @@ int? parsePrice(String input, {required bool base}) {
   return amount > BigInt.from(1000000000000) ? null : amount.toInt();
 }
 
-String displayEuros(String cents) {
+String displayEuros(String cents, {String locale = 'de'}) {
   final negative = cents.startsWith('-');
   final digits = (negative ? cents.substring(1) : cents).padLeft(3, '0');
-  return '${negative ? '−' : ''}${digits.substring(0, digits.length - 2)},${digits.substring(digits.length - 2)} €';
+  return '${negative ? '−' : ''}${digits.substring(0, digits.length - 2)}${decimalSeparator(locale)}${digits.substring(digits.length - 2)} €';
 }
 
-String displayUnitPrice(int cents) {
+String displayUnitPrice(int cents, {String locale = 'de'}) {
   final digits = cents.toString().padLeft(6, '0');
   return displayQuantity(
     '${digits.substring(0, digits.length - 5)}.${digits.substring(digits.length - 5)}',
+    locale: locale,
   );
 }

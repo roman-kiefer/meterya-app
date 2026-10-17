@@ -81,7 +81,7 @@ class _VirtualReadingsViewState extends State<VirtualReadingsView> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${registerName(l, register!)}: ${displayQuantity(p['quantity'] as String)} ${p['unit']}',
+                    '${registerName(l, register!)}: ${displayQuantity(p['quantity'] as String, locale: l.localeName)} ${p['unit']}',
                   ),
                   Text(
                     (p['source_ids'] as List)
@@ -91,7 +91,7 @@ class _VirtualReadingsViewState extends State<VirtualReadingsView> {
                   ),
                   if (p['grid_quantity'] != null)
                     Text(
-                      '${l.importRegister}: ${displayQuantity(p['grid_quantity'] as String)} kWh · ${l.virtualPV}: ${displayQuantity(p['house_pv_quantity'] as String)} kWh',
+                      '${l.importRegister}: ${displayQuantity(p['grid_quantity'] as String, locale: l.localeName)} kWh · ${l.virtualPV}: ${displayQuantity(p['house_pv_quantity'] as String, locale: l.localeName)} kWh',
                     ),
                 ],
               ),
@@ -109,7 +109,7 @@ class _VirtualReadingsViewState extends State<VirtualReadingsView> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
-                    '${registerName(l, register!)}: ${total.from.isEmpty ? '—' : displayQuantity(total.quantity)} ${total.unit}',
+                    '${registerName(l, register!)}: ${total.from.isEmpty ? '—' : displayQuantity(total.quantity, locale: l.localeName)} ${total.unit}',
                   ),
                 ],
               ),

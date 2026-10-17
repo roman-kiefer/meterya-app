@@ -188,7 +188,7 @@ class _ReadingHistoryViewState extends State<ReadingHistoryView> {
                           cell(Text(date.format(DateTime.parse(reading.date)))),
                           cell(
                             Text(
-                              '${displayQuantity(reading.value)} ${register.unit}',
+                              '${displayQuantity(reading.value, locale: l.localeName)} ${register.unit}',
                               textAlign: TextAlign.right,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -248,7 +248,7 @@ class _ReadingHistoryViewState extends State<ReadingHistoryView> {
                                 annualPosition == null ||
                                         annualPosition.from.isEmpty
                                     ? '—'
-                                    : '${displayQuantity(annualPosition.quantity)} ${register.unit}',
+                                    : '${displayQuantity(annualPosition.quantity, locale: l.localeName)} ${register.unit}',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   color: registerAccent(
@@ -294,7 +294,7 @@ class _ReadingHistoryViewState extends State<ReadingHistoryView> {
       );
     }
     return Text(
-      '${displayQuantity(reading.difference!)} ${register.unit}',
+      '${displayQuantity(reading.difference!, locale: l.localeName)} ${register.unit}',
       textAlign: TextAlign.right,
       style: TextStyle(color: registerAccent(register.direction, context)),
     );

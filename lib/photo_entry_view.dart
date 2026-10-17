@@ -356,7 +356,10 @@ class _PhotoEntryViewState extends State<PhotoEntryView> {
                 if (vm.proposal!.existingValue != null)
                   Text(
                     l.photoExistingValue(
-                      displayQuantity(vm.proposal!.existingValue!),
+                      displayQuantity(
+                        vm.proposal!.existingValue!,
+                        locale: l.localeName,
+                      ),
                     ),
                   ),
               ],

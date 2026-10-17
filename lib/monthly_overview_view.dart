@@ -35,7 +35,9 @@ class _MonthlyOverviewViewState extends State<MonthlyOverviewView> {
     if (oldWidget.point.id != point.id) selectedRegisterId = null;
   }
 
-  String _money(String? value) => value == null ? '—' : displayEuros(value);
+  String _money(String? value) => value == null
+      ? '—'
+      : displayEuros(value, locale: AppLocalizations.of(context).localeName);
 
   @override
   Widget build(BuildContext context) {
@@ -107,12 +109,12 @@ class _MonthlyOverviewViewState extends State<MonthlyOverviewView> {
         .firstOrNull;
     String quantity(AnnualPosition? p) => p == null || p.from.isEmpty
         ? '—'
-        : '${displayQuantity(p.quantity)} ${register.unit}';
+        : '${displayQuantity(p.quantity, locale: l.localeName)} ${register.unit}';
     String rate(MonthlyOverviewRow row) => row.changingRate
         ? l.monthRateChanges
         : row.rate == null
         ? '—'
-        : '${displayQuantity('${row.rate!.cents ~/ 1000}.${(row.rate!.cents % 1000).toString().padLeft(3, '0')}')} ct/${register.unit}';
+        : '${displayQuantity('${row.rate!.cents ~/ 1000}.${(row.rate!.cents % 1000).toString().padLeft(3, '0')}', locale: l.localeName)} ct/${register.unit}';
     String totalMoney(AnnualSummary? value) => _money(
       value?.overview
           .where((v) => v.registerId == register.id)
@@ -294,7 +296,7 @@ class _MonthlyOverviewViewState extends State<MonthlyOverviewView> {
                               Text(
                                 row.closing == null
                                     ? '—'
-                                    : '${displayQuantity(row.closing!.value)} ${register.unit}',
+                                    : '${displayQuantity(row.closing!.value, locale: l.localeName)} ${register.unit}',
                               ),
                             ),
                           DataCell(

@@ -269,7 +269,7 @@ class PointOverviewCard extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 6),
                           child: Text(
-                            '${registerName(l, register)}: ${latest == null ? l.noReadings : '${displayQuantity(latest.value)} ${register.unit}'}',
+                            '${registerName(l, register)}: ${latest == null ? l.noReadings : '${displayQuantity(latest.value, locale: l.localeName)} ${register.unit}'}',
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         );

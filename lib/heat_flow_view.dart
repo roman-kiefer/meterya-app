@@ -49,9 +49,14 @@ class HeatFlowView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final overview = HeatYearOverview(report, year);
-    String quantity(String? value) =>
-        value == null ? '—' : '${displayQuantity(value)} kWh';
-    String share(int value) => '${value ~/ 10},${value % 10} %';
+    String quantity(String? value) => value == null
+        ? '—'
+        : '${displayQuantity(value, locale: l.localeName)} kWh';
+    String share(int value) =>
+        '${value ~/ 10}${decimalSeparator(l.localeName)}${value % 10} %';
+    final dateFormat = l.localeName == 'de'
+        ? DateFormat('dd.MM.yyyy', l.localeName)
+        : DateFormat.yMd(l.localeName);
     final gridShare = overview.gridShare;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -80,8 +85,8 @@ class HeatFlowView extends StatelessWidget {
                     child: Text(
                       overview.from == null
                           ? l.noBillingReadings
-                          : '${DateFormat('dd.MM.yyyy').format(DateTime.parse(overview.from!))} – '
-                                '${DateFormat('dd.MM.yyyy').format(DateTime.parse(overview.until!))}',
+                          : '${dateFormat.format(DateTime.parse(overview.from!))} – '
+                                '${dateFormat.format(DateTime.parse(overview.until!))}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFeatures: const [FontFeature.tabularFigures()],
                       ),

@@ -25,13 +25,24 @@ class ReadingChangeDialog extends StatefulWidget {
 class _ReadingChangeDialogState extends State<ReadingChangeDialog> {
   final form = GlobalKey<FormState>();
   late final date = TextEditingController(text: widget.reading.date);
-  late final value = TextEditingController(
-    text: displayQuantity(widget.reading.value),
-  );
+  final value = TextEditingController();
+  bool initializedValue = false;
   final reason = TextEditingController();
   String key = const Uuid().v4();
   bool saving = false;
   String? error;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!initializedValue) {
+      value.text = displayQuantity(
+        widget.reading.value,
+        locale: AppLocalizations.of(context).localeName,
+      );
+      initializedValue = true;
+    }
+  }
+
   @override
   void dispose() {
     date.dispose();
@@ -85,7 +96,7 @@ class _ReadingChangeDialogState extends State<ReadingChangeDialog> {
                   const SizedBox(height: 24),
                   if (widget.retract)
                     Text(
-                      '${widget.reading.date} · ${displayQuantity(widget.reading.value)} ${widget.point.registers.firstWhere((r) => r.id == widget.reading.registerId).unit}',
+                      '${widget.reading.date} · ${displayQuantity(widget.reading.value, locale: l.localeName)} ${widget.point.registers.firstWhere((r) => r.id == widget.reading.registerId).unit}',
                     )
                   else ...[
                     TextFormField(

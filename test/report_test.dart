@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:meterya_app/l10n/app_localizations.dart';
+import 'package:meterya_app/l10n/app_localizations_en.dart';
 import 'package:meterya_app/l10n/app_localizations_de.dart';
 import 'package:meterya_app/models.dart';
 import 'package:meterya_app/report.dart';
@@ -95,6 +96,27 @@ Widget localized(Widget child) => MaterialApp(
 
 void main() {
   setUpAll(() => initializeDateFormatting('de'));
+  test(
+    'English HTML report uses translated labels and exact decimal amounts',
+    () {
+      final report = BillingReport(workspace, point(), summary(), exportedAt);
+      final html = report
+          .render(ReportFormat.html, AppLocalizationsEn())
+          .content;
+      expect(html, contains('<html lang="en">'));
+      expect(html, contains('Billing report'));
+      expect(html, contains('Incomplete year'));
+      expect(html, contains('12345678901234567.89 €'));
+      expect(html, isNot(contains('12345678901234567,89 €')));
+      final data =
+          jsonDecode(
+                report.render(ReportFormat.json, AppLocalizationsEn()).content,
+              )
+              as Map<String, dynamic>;
+      expect(data['net_cents'], '1234567890123456789');
+      expect((data['positions'] as List).first['quantity'], '0.666667');
+    },
+  );
   test('report retains exact API money and relevant neighbouring readings', () {
     final report = BillingReport(workspace, point(), summary(), exportedAt);
     final data =

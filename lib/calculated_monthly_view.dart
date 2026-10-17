@@ -13,8 +13,9 @@ class CalculatedMonthlyView extends StatelessWidget {
     final format = DateFormat.yMd(
       Localizations.localeOf(context).toLanguageTag(),
     );
-    String money(String? value) =>
-        value == null ? l.notCalculated : displayEuros(value);
+    String money(String? value) => value == null
+        ? l.notCalculated
+        : displayEuros(value, locale: l.localeName);
     return ExpansionTile(
       title: Text(l.calculatedMonthsTitle),
       children: [
@@ -59,7 +60,10 @@ class CalculatedMonthlyView extends StatelessWidget {
                               ? priceCategory(l, position.direction)
                               : l.billingQuantity(
                                   priceCategory(l, position.direction),
-                                  displayQuantity(position.quantity),
+                                  displayQuantity(
+                                    position.quantity,
+                                    locale: l.localeName,
+                                  ),
                                   position.unit,
                                 ),
                         ),

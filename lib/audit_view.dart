@@ -86,22 +86,19 @@ class _AuditViewState extends State<AuditView> {
         final time = DateTime.tryParse(d.value);
         return time == null
             ? d.value
-            : DateFormat(
-                'dd.MM.yyyy HH:mm',
-                l.localeName,
-              ).format(time.toLocal());
+            : DateFormat.yMd(l.localeName).add_Hm().format(time.toLocal());
       case 'explanation':
         return l.auditExplanation(d.value);
       case 'invitation_status':
         return l.auditInvitationStatus(d.value);
       case 'decimal':
-        return displayQuantity(d.value);
+        return displayQuantity(d.value, locale: l.localeName);
       case 'ct':
-        return l.auditUnitPrice(displayQuantity(d.value));
+        return l.auditUnitPrice(displayQuantity(d.value, locale: l.localeName));
       case 'meter_type':
         return l.auditMeterType(d.value);
       case 'cents':
-        return '${displayEuros(d.value)} €';
+        return displayEuros(d.value, locale: l.localeName);
       case 'boolean':
         return d.value == 'true' ? l.auditActive : l.auditInactive;
       case 'role':
@@ -342,10 +339,9 @@ class _AuditViewState extends State<AuditView> {
                     row([
                       cell(
                         text(
-                          DateFormat(
-                            'dd.MM.yyyy HH:mm:ss',
+                          DateFormat.yMd(
                             l.localeName,
-                          ).format(e.occurredAt.toLocal()),
+                          ).add_Hms().format(e.occurredAt.toLocal()),
                         ),
                         170,
                       ),
