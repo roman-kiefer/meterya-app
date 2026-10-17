@@ -223,7 +223,7 @@ class _TransitionViewState extends State<TransitionView> {
                                               r.date == date.text,
                                         )
                                         .firstOrNull;
-                                    return '${registerName(l, reg)}: ${r == null ? l.transitionMissing : displayQuantity(r.value)} ${reg.unit}';
+                                    return '${registerName(l, reg)}: ${r == null ? l.transitionMissing : displayQuantity(r.value, locale: l.localeName)} ${reg.unit}';
                                   })
                                   .join('\n'),
                             ),

@@ -115,26 +115,28 @@ void main() {
             },
           ],
         });
-        Future<void> show(int year) => tester.pumpWidget(
-          MaterialApp(
-            theme: meteryaTheme(),
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: HeatFlowView(
-                    report: report,
-                    year: year,
-                    net: Point('z1', 'Z1', '9295', 1, [], []),
-                    house: Point('z2', 'Z2', '9296', 1, [], []),
+        Future<void> show(int year, {String language = 'de'}) =>
+            tester.pumpWidget(
+              MaterialApp(
+                locale: Locale(language),
+                theme: meteryaTheme(),
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: Scaffold(
+                  body: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: HeatFlowView(
+                        report: report,
+                        year: year,
+                        net: Point('z1', 'Z1', '9295', 1, [], []),
+                        house: Point('z2', 'Z2', '9296', 1, [], []),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        );
+            );
         await show(2026);
         expect(find.text('Virtueller Zähler'.toUpperCase()), findsNothing);
 
@@ -145,7 +147,16 @@ void main() {
         expect(find.text('26,4 %'), findsOneWidget);
         expect(find.text('01.10.2026 – 07.10.2026'), findsOneWidget);
         expect(tester.takeException(), isNull);
+        await show(2026, language: 'en');
+        await tester.pumpAndSettle();
+        expect(find.text('19.5 kWh'), findsOneWidget);
+        expect(find.text('26.5 kWh'), findsOneWidget);
+        expect(find.text('73.6 %'), findsOneWidget);
+        expect(find.text('26.4 %'), findsOneWidget);
+        expect(find.text('10/1/2026 – 10/7/2026'), findsOneWidget);
+        expect(tester.takeException(), isNull);
         await show(2025);
+        await tester.pumpAndSettle();
         expect(find.text('26,5 kWh'), findsNothing);
         expect(find.text('—'), findsNWidgets(3));
         expect(tester.takeException(), isNull);

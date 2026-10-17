@@ -31,13 +31,13 @@ class YearBar {
 
 class YearComparisonModel {
   /// Round displayed quantities to two decimal places using integer arithmetic.
-  static String formatQuantity(String value) {
+  static String formatQuantity(String value, {String locale = 'de'}) {
     final amount = quantityAmount(value);
     if (amount == null) return '—';
     final digits = ((amount + BigInt.from(5000)) ~/ BigInt.from(10000))
         .toString()
         .padLeft(3, '0');
-    return '${digits.substring(0, digits.length - 2)},${digits.substring(digits.length - 2)}';
+    return '${digits.substring(0, digits.length - 2)}${decimalSeparator(locale)}${digits.substring(digits.length - 2)}';
   }
 
   static List<YearBar> window(Point point, String registerId, int lastYear) {

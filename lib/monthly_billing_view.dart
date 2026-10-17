@@ -34,7 +34,11 @@ class MonthlyBillingView extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(l.openingReading(displayQuantity(bill.opening))),
+                child: Text(
+                  l.openingReading(
+                    displayQuantity(bill.opening, locale: l.localeName),
+                  ),
+                ),
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -81,18 +85,42 @@ class MonthlyBillingView extends StatelessWidget {
                               ).format(DateTime.parse(row.date)),
                             ),
                           ),
-                          DataCell(Text(displayQuantity(row.value))),
                           DataCell(
-                            Text('${displayQuantity(row.quantity)} kWh'),
+                            Text(
+                              displayQuantity(row.value, locale: l.localeName),
+                            ),
                           ),
                           DataCell(
                             Text(
-                              '${displayQuantity('${row.rate ~/ 1000}.${(row.rate % 1000).toString().padLeft(3, '0')}')} ct/kWh',
+                              '${displayQuantity(row.quantity, locale: l.localeName)} kWh',
                             ),
                           ),
-                          DataCell(Text('${displayQuantity(row.energy)} €')),
-                          DataCell(Text(displayEuros(row.base.toString()))),
-                          DataCell(Text(displayEuros(row.payment.toString()))),
+                          DataCell(
+                            Text(
+                              '${displayQuantity('${row.rate ~/ 1000}.${(row.rate % 1000).toString().padLeft(3, '0')}', locale: l.localeName)} ct/kWh',
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              '${displayQuantity(row.energy, locale: l.localeName)} €',
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              displayEuros(
+                                row.base.toString(),
+                                locale: l.localeName,
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              displayEuros(
+                                row.payment.toString(),
+                                locale: l.localeName,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                   ],
@@ -102,29 +130,33 @@ class MonthlyBillingView extends StatelessWidget {
                 title: Text(
                   bill.isExport ? l.exportRegister : l.statementConsumption,
                 ),
-                trailing: Text('${displayQuantity(bill.quantity)} kWh'),
+                trailing: Text(
+                  '${displayQuantity(bill.quantity, locale: l.localeName)} kWh',
+                ),
               ),
               ListTile(
                 title: Text(
                   bill.isExport ? l.statementExportEnergy : l.statementEnergy,
                 ),
-                trailing: Text(displayEuros(bill.energy)),
+                trailing: Text(displayEuros(bill.energy, locale: l.localeName)),
               ),
               ListTile(
                 title: Text(l.baseCosts),
-                trailing: Text(displayEuros(bill.base)),
+                trailing: Text(displayEuros(bill.base, locale: l.localeName)),
               ),
               ListTile(
                 title: Text(
                   bill.isExport ? l.statementExportTotal : l.statementTotal,
                 ),
-                trailing: Text(displayEuros(bill.total)),
+                trailing: Text(displayEuros(bill.total, locale: l.localeName)),
               ),
               ListTile(
                 title: Text(
                   bill.isExport ? l.statementReceived : l.statementPayment,
                 ),
-                trailing: Text(displayEuros(bill.payment)),
+                trailing: Text(
+                  displayEuros(bill.payment, locale: l.localeName),
+                ),
               ),
               ListTile(
                 title: Text(
@@ -137,7 +169,10 @@ class MonthlyBillingView extends StatelessWidget {
                       : l.statementDue,
                 ),
                 trailing: Text(
-                  displayEuros(BigInt.parse(bill.balance).abs().toString()),
+                  displayEuros(
+                    BigInt.parse(bill.balance).abs().toString(),
+                    locale: l.localeName,
+                  ),
                 ),
               ),
             ],

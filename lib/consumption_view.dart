@@ -43,7 +43,7 @@ class ConsumptionView extends StatelessWidget {
               ListTile(
                 title: Text(
                   l.quantityWithUnit(
-                    displayQuantity(interval.quantity),
+                    displayQuantity(interval.quantity, locale: l.localeName),
                     interval.unit,
                   ),
                 ),

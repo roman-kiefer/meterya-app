@@ -149,7 +149,10 @@ class _MetricCard extends StatelessWidget {
         summary?.positions.where((p) => p.from.isNotEmpty).toList() ??
         <AnnualPosition>[];
     String date(String value) =>
-        DateFormat('dd.MM.yyyy').format(DateTime.parse(value));
+        (l.localeName == 'de'
+                ? DateFormat('dd.MM.yyyy', l.localeName)
+                : DateFormat.yMd(l.localeName))
+            .format(DateTime.parse(value));
     final periods = measured
         .map((p) => l.overviewRecordedPeriod(date(p.from), date(p.until)))
         .toSet();
@@ -210,7 +213,7 @@ class _MetricCard extends StatelessWidget {
                 Text(
                   summary?.netCents == null
                       ? l.notCalculated
-                      : displayEuros(summary!.netCents!),
+                      : displayEuros(summary!.netCents!, locale: l.localeName),
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -240,7 +243,7 @@ class _MetricCard extends StatelessWidget {
                       return Text(
                         position == null
                             ? '—'
-                            : '${displayQuantity(position.quantity)} ${r.unit}',
+                            : '${displayQuantity(position.quantity, locale: l.localeName)} ${r.unit}',
                         style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(fontWeight: FontWeight.w700),
                       );

@@ -25,8 +25,9 @@ class BillingView extends StatelessWidget {
       Localizations.localeOf(context).toLanguageTag(),
     );
     final summaries = point.annual;
-    String money(String? cents) =>
-        cents == null ? l.notCalculated : displayEuros(cents);
+    String money(String? cents) => cents == null
+        ? l.notCalculated
+        : displayEuros(cents, locale: l.localeName);
     return ExpansionTile(
       initiallyExpanded: initiallyExpanded,
       title: Text(l.annualBilling),
@@ -67,7 +68,10 @@ class BillingView extends StatelessWidget {
                           ? priceCategory(l, position.direction)
                           : l.billingQuantity(
                               priceCategory(l, position.direction),
-                              displayQuantity(position.quantity),
+                              displayQuantity(
+                                position.quantity,
+                                locale: l.localeName,
+                              ),
                               position.unit,
                             ),
                     ),

@@ -43,7 +43,7 @@ class BookedReadingValues extends StatelessWidget {
               '${l.readingDateHeader}: ${parsed == null ? reading.date : DateFormat.yMd(l.localeName).format(parsed)}',
             ),
             Text(
-              '${l.photoValue}: ${displayQuantity(reading.value)} ${register?.unit ?? ''}',
+              '${l.photoValue}: ${displayQuantity(reading.value, locale: l.localeName)} ${register?.unit ?? ''}',
             ),
           ],
         ),
@@ -87,7 +87,9 @@ class _ReadingPhotoPreviewState extends State<ReadingPhotoPreview> {
             l.photoConfirmedValues,
             style: Theme.of(context).textTheme.labelLarge,
           ),
-          Text('${widget.photo.date} · ${displayQuantity(widget.photo.value)}'),
+          Text(
+            '${widget.photo.date} · ${displayQuantity(widget.photo.value, locale: l.localeName)}',
+          ),
           Text(l.photoStatus(widget.photo.status)),
           const SizedBox(height: 12),
         ],

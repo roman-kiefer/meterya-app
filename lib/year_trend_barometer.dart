@@ -15,7 +15,9 @@ class YearTrendBarometer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final percent = trend.percent;
+    final percent = l.localeName.startsWith('en')
+        ? trend.percent?.replaceAll(',', '.')
+        : trend.percent;
     final delta = percent == null ? null : trend.direction;
     final direction = delta == null
         ? l.historyPreviousUnavailable

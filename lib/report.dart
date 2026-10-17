@@ -149,8 +149,9 @@ class BillingReport {
     String e(String text) => escape.convert(text);
     final dates = DateFormat.yMd(l.localeName);
     String date(String value) => dates.format(DateTime.parse(value));
-    String money(String? value) =>
-        value == null ? l.notCalculated : displayEuros(value);
+    String money(String? value) => value == null
+        ? l.notCalculated
+        : displayEuros(value, locale: l.localeName);
     String category(String direction) => switch (direction) {
       'BASE' => l.basePrice,
       'IMPORT' => l.importRegister,
@@ -177,7 +178,10 @@ class BillingReport {
             category(p.direction),
             p.from.isEmpty
                 ? l.notCalculated
-                : l.quantityWithUnit(displayQuantity(p.quantity), p.unit),
+                : l.quantityWithUnit(
+                    displayQuantity(p.quantity, locale: l.localeName),
+                    p.unit,
+                  ),
             p.from.isEmpty
                 ? l.noRegisterCoverage
                 : l.readingPeriod(date(p.from), date(p.until)),
@@ -217,11 +221,11 @@ class BillingReport {
             category(p.category),
             p.category == 'BASE'
                 ? l.basePriceAmount(
-                    displayEuros(p.cents.toString()),
+                    displayEuros(p.cents.toString(), locale: l.localeName),
                     p.period == 'MONTH' ? l.perMonth : l.perYear,
                   )
                 : l.unitPriceAmount(
-                    displayUnitPrice(p.cents),
+                    displayUnitPrice(p.cents, locale: l.localeName),
                     point.registers
                         .firstWhere((r) => r.direction == p.category)
                         .unit,
@@ -244,7 +248,7 @@ class BillingReport {
                   .direction,
             ),
             l.quantityWithUnit(
-              displayQuantity(r.value),
+              displayQuantity(r.value, locale: l.localeName),
               point.registers.firstWhere((reg) => reg.id == r.registerId).unit,
             ),
             r.id ?? l.notAvailable,
@@ -269,7 +273,7 @@ class BillingReport {
                   .firstWhere((r) => r.id == row['register_id'])
                   .direction,
             ),
-            '${displayQuantity(row['quantity'] as String)} ${row['unit']}',
+            '${displayQuantity(row['quantity'] as String, locale: l.localeName)} ${row['unit']}',
             (row['source_ids'] as List)
                 .cast<String>()
                 .map(

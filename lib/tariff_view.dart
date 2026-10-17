@@ -37,10 +37,13 @@ class PriceTile extends StatelessWidget {
     );
     final amount = price.category == 'BASE'
         ? l.basePriceAmount(
-            displayEuros(price.cents.toString()),
+            displayEuros(price.cents.toString(), locale: l.localeName),
             price.period == 'MONTH' ? l.perMonth : l.perYear,
           )
-        : l.unitPriceAmount(displayUnitPrice(price.cents), unit);
+        : l.unitPriceAmount(
+            displayUnitPrice(price.cents, locale: l.localeName),
+            unit,
+          );
     final validity = price.until.isEmpty
         ? l.priceFrom(format.format(DateTime.parse(price.from)))
         : l.pricePeriod(
