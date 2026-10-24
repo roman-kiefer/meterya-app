@@ -62,4 +62,10 @@ flutter build web
 
 The compiled files are in `build/web/`. They are generated and are not committed. The app uses relative API paths and needs the proxy routes above for an end-to-end sign-in flow.
 
+## Community
+
+See the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), and
+[accessibility information](ACCESSIBILITY.md). Please follow the
+[Code of Conduct](CODE_OF_CONDUCT.md).
+
 The source code is licensed under [AGPL-3.0-only](LICENSE). The SVG logo and favicon contain CC BY-SA 4.0 license metadata. Copyright © 2026 Meterya contributors.
