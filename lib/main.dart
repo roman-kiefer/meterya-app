@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'version_footer.dart';
 import 'profile_menu.dart';
 import 'profile_view.dart';
 import 'login_view.dart';
@@ -17,6 +19,7 @@ import 'app_theme.dart';
 void main() {
   final model = ViewModel(Repository(ApiService(http.Client(), Uri.base)));
   runApp(MeteryaApp(model: model));
+  unawaited(model.loadVersion());
   final invitation = Uri.base.path == '/invitations/accept'
       ? Uri.base.queryParameters['token']
       : null;
@@ -145,6 +148,10 @@ class Home extends StatelessWidget {
 
         if (!model.signedIn || needsMfa) {
           return LoginView(
+            footer: VersionFooter(
+              apiVersion: model.apiVersion,
+              loading: model.versionLoading,
+            ),
             busy: model.busy,
             onLogout: model.signedIn ? () => signOut(context, model) : null,
             error:

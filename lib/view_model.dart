@@ -7,6 +7,33 @@ import 'meter_selection_store.dart';
 
 class ViewModel extends ChangeNotifier {
   final Repository repository;
+  String? apiVersion;
+  bool versionLoading = true;
+  Future<void>? _versionRequest;
+  bool _disposed = false;
+
+  /// Fetch once per app instance, independently of session and workspace state.
+  Future<void> loadVersion() => _versionRequest ??= _loadVersion();
+
+  Future<void> _loadVersion() async {
+    String? version;
+    try {
+      version = await repository.version();
+    } catch (_) {
+      // Optional diagnostics must never interrupt authentication or normal use.
+    }
+    if (_disposed) return;
+    apiVersion = version;
+    versionLoading = false;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
   List<Workspace> workspaces = [];
   List<Point> points = [];
   List<MeterTransition> meterTransitions = [];

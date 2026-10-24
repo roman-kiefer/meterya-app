@@ -62,6 +62,13 @@ flutter build web
 
 The compiled files are in `build/web/`. They are generated and are not committed. The app uses relative API paths and needs the proxy routes above for an end-to-end sign-in flow.
 
+The sign-in page and navigation footer show the running UI and API versions
+independently. Local builds display `UI: dev`. To embed a release tag, use
+`flutter build web --dart-define=UI_VERSION=v1.2.3`. The release workflow embeds
+the Git tag before packaging the web image, so deployments using `latest` also
+show the original release tag. The API version is loaded once at startup from
+`GET /api/v1/version`; an unavailable version never blocks sign-in or normal use.
+
 ## Community
 
 See the [contribution guide](CONTRIBUTING.md), [security policy](SECURITY.md), and

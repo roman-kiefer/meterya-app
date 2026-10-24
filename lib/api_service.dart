@@ -14,6 +14,25 @@ class ApiService {
   String? csrf;
   ApiService(this.client, this.base);
 
+  Future<String> version() async {
+    final response = await client
+        .get(
+          base.resolve('/api/v1/version'),
+          headers: {'Accept': 'application/json'},
+        )
+        .timeout(const Duration(seconds: 10));
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw const ApiException('VERSION_UNAVAILABLE');
+    }
+    final data = jsonDecode(response.body);
+    if (data is! Map<String, dynamic> ||
+        data['version'] is! String ||
+        (data['version'] as String).trim().isEmpty) {
+      throw const ApiException('VERSION_UNAVAILABLE');
+    }
+    return (data['version'] as String).trim();
+  }
+
   Future<void> restoreArchive(String job, String hash) async {
     final response = await client.post(
       base.resolve('/api/v1/operator/backup/jobs/$job/restore'),

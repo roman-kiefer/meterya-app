@@ -1,5 +1,6 @@
 {
   "@@locale": "en",
+  "versionUnavailable": "unavailable",
   "settingsAccessDenied": "Settings are only available to admins and moderators.",
   "auditTitle": "Audit log",
   "auditHelp": "Saved changes over time. Activities that were not recorded and permanently removed events are not shown.",
