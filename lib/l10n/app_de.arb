@@ -50,6 +50,7 @@
   "auditPricePeriod": "{period, select, MONTH{Monatlich} YEAR{Jährlich} other{Zeitraum}}",
   "@auditPricePeriod": {"placeholders": {"period": {"type":"String"}}},
   "@@locale": "de",
+  "versionUnavailable": "nicht verfügbar",
   "appTitle": "meterya",
   "settings": "Einstellungen",
   "profile": "Profil",

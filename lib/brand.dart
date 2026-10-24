@@ -17,11 +17,13 @@ class MeteryaBrand extends StatelessWidget {
         filterQuality: FilterQuality.high,
       ),
       const SizedBox(width: 10),
-      Text(
-        AppLocalizations.of(context).appTitle,
-        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-          fontWeight: FontWeight.w700,
-          color: Theme.of(context).colorScheme.primary,
+      Flexible(
+        child: Text(
+          AppLocalizations.of(context).appTitle,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
       ),
     ],

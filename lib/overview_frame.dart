@@ -1,4 +1,5 @@
 import 'profile_menu.dart';
+import 'version_footer.dart';
 import 'audit_view.dart';
 import 'app_theme.dart';
 import 'brand.dart';
@@ -191,18 +192,32 @@ class AppNavigationFrame extends StatelessWidget {
         label: Text(l.recordReading),
       ),
     );
+    final footer = VersionFooter(
+      apiVersion: model.apiVersion,
+      loading: model.versionLoading,
+    );
     if (drawerMode) {
-      return NavigationDrawer(
-        selectedIndex: visibleIndex < 0 ? null : visibleIndex,
-        onDestinationSelected: busy || model.busy ? null : selectDestination,
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          brand,
-          recordAction,
-          for (final destination in destinations)
-            NavigationDrawerDestination(
-              icon: Icon(destination.icon),
-              label: Flexible(child: Text(destination.label)),
+          Expanded(
+            child: NavigationDrawer(
+              selectedIndex: visibleIndex < 0 ? null : visibleIndex,
+              onDestinationSelected: busy || model.busy
+                  ? null
+                  : selectDestination,
+              children: [
+                brand,
+                recordAction,
+                for (final destination in destinations)
+                  NavigationDrawerDestination(
+                    icon: Icon(destination.icon),
+                    label: Flexible(child: Text(destination.label)),
+                  ),
+              ],
             ),
+          ),
+          footer,
         ],
       );
     }
@@ -213,6 +228,10 @@ class AppNavigationFrame extends StatelessWidget {
           children: [
             NavigationRail(
               extended: true,
+              scrollable: true,
+              leadingAtTop: false,
+              trailingAtBottom: true,
+              trailing: SizedBox(width: 240, child: footer),
               minExtendedWidth: 220,
               leading: Column(children: [brand, recordAction]),
               selectedIndex: visibleIndex < 0 ? null : visibleIndex,

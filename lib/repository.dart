@@ -9,6 +9,7 @@ import 'heat_model.dart';
 class Repository {
   final ApiService api;
   Repository(this.api);
+  Future<String> version() => api.version();
   Future<Uint8List> workingPhoto(
     String ws,
     String id,
