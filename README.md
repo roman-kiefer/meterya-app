@@ -49,6 +49,18 @@ formatting and HTML reports use the resolved language. Amounts remain in euros,
 and date inputs and API data retain ISO dates (`YYYY-MM-DD`). Decimal inputs
 accept either a dot or a comma.
 
+## GitHub releases
+
+Pushing a version tag such as `v1.0.3` runs the release workflow. After all
+checks pass and the web image is published, it creates a GitHub release for
+that existing tag with automatically generated release notes. Rerunning the
+workflow preserves an existing release. The `contents: write` permission is
+limited to the release job.
+
+Tags created before this workflow change do not gain releases automatically;
+their missing GitHub releases must be created separately after verifying that
+the corresponding image publication succeeded.
+
 ## Development checks
 
 Use a Flutter SDK compatible with the Dart constraint in `pubspec.yaml`. The release workflow uses Flutter `3.47.4`.
