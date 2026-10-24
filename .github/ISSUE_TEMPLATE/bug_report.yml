@@ -1,0 +1,58 @@
+name: Bug report
+description: Report a reproducible problem in Meterya App.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repository covers the Flutter web interface, browser behavior, visualization, and German and English UI translations.
+        For other components, see the routing guidance in [CONTRIBUTING.md](https://github.com/roman-kiefer/meterya-app/blob/main/CONTRIBUTING.md).
+        Do not disclose vulnerabilities here. Read [SECURITY.md](https://github.com/roman-kiefer/meterya-app/blob/main/SECURITY.md).
+        Use synthetic data and remove credentials, tokens, personal data, and identifying details from attachments.
+  - type: input
+    id: version
+    attributes:
+      label: Affected versions
+      description: "Include the app image tag and, where possible, digest, or the source commit and Flutter version. Include the API version if relevant. The latest tag changes over time."
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: "Include the browser and version, operating system, screen size when relevant, and whether the app was built from source or deployed with Docker Compose."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide minimal numbered steps and synthetic example data.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized logs or screenshots
+      description: Optional. Do not attach configured .env files, realm exports, database dumps, backups, or expanded Compose configuration.
+  - type: checkboxes
+    id: preparation
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for this problem.
+          required: true
+        - label: This report contains no credentials or private data and does not disclose a suspected vulnerability.
+          required: true
