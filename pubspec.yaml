@@ -20,5 +20,47 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/roboto-thin.ttf
+          weight: 100
+        - asset: assets/fonts/roboto-thinitalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/roboto-light.ttf
+          weight: 300
+        - asset: assets/fonts/roboto-lightitalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/roboto-regular.ttf
+          weight: 400
+        - asset: assets/fonts/roboto-italic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/roboto-medium.ttf
+          weight: 500
+        - asset: assets/fonts/roboto-mediumitalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/roboto-bold.ttf
+          weight: 700
+        - asset: assets/fonts/roboto-bolditalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/roboto-black.ttf
+          weight: 900
+        - asset: assets/fonts/roboto-blackitalic.ttf
+          weight: 900
+          style: italic
+    - family: Noto Sans Symbols
+      fonts:
+        - asset: assets/fonts/NotoSansSymbols.ttf
+    - family: Noto Sans Symbols 2
+      fonts:
+        - asset: assets/fonts/NotoSansSymbols2-Regular.ttf
   assets:
     - assets/branding/
+    - assets/fonts/Roboto-LICENSE.txt
+    - assets/fonts/NotoSansSymbols-LICENSE.txt
+    - assets/fonts/NotoSansSymbols2-LICENSE.txt
