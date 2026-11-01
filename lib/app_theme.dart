@@ -13,6 +13,8 @@ ThemeData meteryaTheme({Brightness brightness = Brightness.light}) {
   final primary = dark ? const Color(0xff7bd8ca) : const Color(0xff0f766e);
   final base = ThemeData(
     useMaterial3: true,
+    fontFamily: 'Roboto',
+    fontFamilyFallback: const ['Noto Sans Symbols', 'Noto Sans Symbols 2'],
     colorScheme: ColorScheme.fromSeed(
       seedColor: const Color(0xff0f766e),
       brightness: brightness,
