@@ -105,9 +105,15 @@ class Reading {
 class Point {
   final List<ReadingPhoto> photos;
   final String id, name, serial;
-  final String kind;
+  final String kind, meterType;
   final Map<String, dynamic>? virtualInfo;
+  final List<AdvancePayment> advancePayments;
   bool get isVirtual => kind == 'VIRTUAL';
+
+  /// Advance payments are configured for physical electricity meters only.
+  bool get supportsAdvancePayments =>
+      !isVirtual &&
+      (meterType == 'ELECTRICITY' || meterType == 'BIDIRECTIONAL');
   bool get isVirtualHeat => virtualInfo?['definition']?['type'] == 'HEAT';
   String? get dataVersion => virtualInfo?['data_version'] as String?;
   List<Map<String, dynamic>> get virtualSources =>
@@ -134,14 +140,19 @@ class Point {
     Iterable<Reading> readings, {
     this.archived = false,
     this.kind = 'PHYSICAL',
+    this.meterType = '',
     this.virtualInfo,
+    Iterable<AdvancePayment> advancePayments = const [],
     this.photos = const [],
     this.history = const [],
     Iterable<ConsumptionInterval>? consumption,
     Tariffs? tariffs,
     Iterable<AnnualSummary>? annual,
     Iterable<MonthlyBill> monthlyBilling = const [],
-  }) : registers = List.unmodifiable(registers),
+  }) : advancePayments = List.unmodifiable(
+         [...advancePayments]..sort((a, b) => a.from.compareTo(b.from)),
+       ),
+       registers = List.unmodifiable(registers),
        readings = List.unmodifiable(readings),
        consumption = consumption == null
            ? null
@@ -166,7 +177,11 @@ class Point {
       ),
       readings,
       kind: j['kind'] as String? ?? 'PHYSICAL',
+      meterType: meter['type'] as String? ?? '',
       virtualInfo: j['virtual'] as Map<String, dynamic>?,
+      advancePayments: (j['advance_payments'] as List? ?? []).map(
+        (a) => AdvancePayment.fromJson(a as Map<String, dynamic>),
+      ),
       photos: (j['photos'] as List? ?? [])
           .map((p) => ReadingPhoto.fromJson(p as Map<String, dynamic>))
           .toList(),
@@ -286,6 +301,16 @@ class Price {
   };
 }
 
+/// Monthly advance payment valid from [from] until the next entry starts.
+class AdvancePayment {
+  final String from;
+  final int cents;
+  const AdvancePayment(this.from, this.cents);
+  factory AdvancePayment.fromJson(Map<String, dynamic> j) =>
+      AdvancePayment(j['valid_from'] as String, j['cents'] as int);
+  Map<String, dynamic> toJson() => {'valid_from': from, 'cents': cents};
+}
+
 class Tariffs {
   final List<Price> basePrices, unitPrices;
   const Tariffs(this.basePrices, this.unitPrices);
@@ -371,6 +396,10 @@ class AnnualSummary {
   final List<RegisterOverview> overview;
   final bool complete, estimated;
   final String? baseCents, netCents;
+
+  /// Present only when the point has an advance payment schedule. The balance
+  /// is an estimate: positive means a remaining payment, negative a credit.
+  final String? advancePaymentCents, estimatedBalanceCents;
   final List<String> warnings;
   final List<AnnualPosition> positions;
   const AnnualSummary(
@@ -385,6 +414,8 @@ class AnnualSummary {
     this.calculationVersion,
     this.months = const [],
     this.overview = const [],
+    this.advancePaymentCents,
+    this.estimatedBalanceCents,
   });
   factory AnnualSummary.fromJson(Map<String, dynamic> j) => AnnualSummary(
     j['year'] as int,
@@ -403,6 +434,8 @@ class AnnualSummary {
         .toList(),
     pointVersion: j['point_version'] as int?,
     calculationVersion: j['calculation_version'] as int?,
+    advancePaymentCents: j['advance_payment_cents'] as String?,
+    estimatedBalanceCents: j['estimated_balance_cents'] as String?,
     months: List.unmodifiable(
       (j['months'] as List? ?? []).map(
         (m) => CalculatedMonth.fromJson(m as Map<String, dynamic>),

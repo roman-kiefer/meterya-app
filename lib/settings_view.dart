@@ -13,6 +13,7 @@ import 'backup_view.dart';
 import 'transition_view.dart';
 import 'heat_view.dart';
 import 'tariff_view.dart';
+import 'advance_payment_view.dart';
 import 'point_detail_view.dart';
 import 'conflict_reload.dart';
 
@@ -442,6 +443,21 @@ class _SettingsViewState extends State<SettingsView> {
                       icon: const Icon(Icons.price_change_outlined),
                       label: Text(l.manageTariffs),
                     ),
+                  if (!point.archived && point.supportsAdvancePayments)
+                    OutlinedButton.icon(
+                      key: ValueKey('manage-advance-${point.id}'),
+                      onPressed: model.busy
+                          ? null
+                          : () => showDialog<void>(
+                              context: context,
+                              builder: (_) => AdvancePaymentDialog(
+                                model: model,
+                                point: point,
+                              ),
+                            ),
+                      icon: const Icon(Icons.savings_outlined),
+                      label: Text(l.manageAdvancePayments),
+                    ),
                   Tooltip(
                     message:
                         model.workspaces.any(
@@ -509,6 +525,7 @@ class _SettingsViewState extends State<SettingsView> {
               ),
             const SizedBox(height: 12),
             TariffView(model: model, point: point, allowManage: false),
+            if (point.supportsAdvancePayments) AdvancePaymentView(point: point),
             TextButton.icon(
               onPressed: model.busy
                   ? null
