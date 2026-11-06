@@ -194,6 +194,44 @@ void main() {
     },
   );
 
+  testWidgets('date picker opens for typed dates outside its range', (
+    tester,
+  ) async {
+    final model = offlineModel();
+    addTearDown(model.dispose);
+    await tester.pumpWidget(
+      app(
+        Builder(
+          builder: (context) => TextButton(
+            onPressed: () => showDialog<void>(
+              context: context,
+              builder: (_) => AdvancePaymentDialog(
+                model: model,
+                point: Point.fromJson(pointJson()),
+              ),
+            ),
+            child: const Text('open'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    for (final (typed, year) in [
+      ('1899-12-31', '1900'),
+      ('9999-01-01', '9998'),
+    ]) {
+      await tester.enterText(find.byKey(const Key('advance-from')), typed);
+      await tester.tap(find.byTooltip('Datum auswählen'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+      expect(find.textContaining(year), findsWidgets);
+      await tester.tap(find.text('Abbrechen').last);
+      await tester.pumpAndSettle();
+    }
+  });
+
   testWidgets('dialog saves a schedule with a mid-month change', (
     tester,
   ) async {
@@ -328,6 +366,7 @@ void main() {
             as Map<String, dynamic>;
     expect(data['advance_payment_cents'], '147516');
     expect(data['estimated_balance_cents'], '2484');
+    expect(data['estimated_balance_notice'], 'ESTIMATE_NOT_PROVIDER_BILL');
     final html = report.render(ReportFormat.html, l).content;
     expect(html, contains('Geschätzte Nachzahlung'));
     expect(html, contains('24,84 €'));

@@ -97,6 +97,8 @@ class BillingReport {
     if (summary.advancePaymentCents != null) ...{
       'advance_payment_cents': summary.advancePaymentCents,
       'estimated_balance_cents': summary.estimatedBalanceCents,
+      // Locale-independent notice, like the warning codes of this schema.
+      'estimated_balance_notice': 'ESTIMATE_NOT_PROVIDER_BILL',
     },
     'positions': [
       for (final p in summary.positions)

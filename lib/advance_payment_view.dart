@@ -188,12 +188,19 @@ class _AdvancePaymentDialogState extends State<AdvancePaymentDialog> {
   }
 
   Future<void> _pickDate() async {
-    final current = DateTime.tryParse(from.text.trim()) ?? DateTime.now();
+    final first = DateTime(1900), last = DateTime(9998, 12, 31);
+    final typed = DateTime.tryParse(from.text.trim()) ?? DateTime.now();
+    // showDatePicker asserts that the initial date lies within its bounds.
+    final initial = typed.isBefore(first)
+        ? first
+        : typed.isAfter(last)
+        ? last
+        : typed;
     final picked = await showDatePicker(
       context: context,
-      initialDate: current,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(9998, 12, 31),
+      initialDate: initial,
+      firstDate: first,
+      lastDate: last,
     );
     if (picked != null) {
       from.text = DateFormat('yyyy-MM-dd').format(picked);
