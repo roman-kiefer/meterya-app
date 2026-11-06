@@ -297,4 +297,12 @@ class ViewModel extends ChangeNotifier {
         await repository.saveTariffs(workspace!.id, point, tariffs, key);
         points = await repository.points(workspace!.id);
       });
+  Future<bool> saveAdvancePayments(
+    Point point,
+    List<AdvancePayment> schedule,
+    String key,
+  ) => run(() async {
+    await repository.saveAdvancePayments(workspace!.id, point, schedule, key);
+    points = await repository.points(workspace!.id);
+  });
 }

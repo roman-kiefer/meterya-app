@@ -330,6 +330,22 @@ class Repository {
     );
   }
 
+  Future<void> saveAdvancePayments(
+    String workspace,
+    Point point,
+    List<AdvancePayment> schedule,
+    String key,
+  ) async {
+    await api.request(
+      '/api/v1/workspaces/$workspace/points/${point.id}/advance-payments',
+      body: {
+        'advance_payments': schedule.map((a) => a.toJson()).toList(),
+        'expected_version': point.version,
+      },
+      idempotencyKey: key,
+    );
+  }
+
   Future<Map<String, dynamic>> virtualCandidates(String ws) async =>
       await api.request('/api/v1/workspaces/$ws/virtual-points')
           as Map<String, dynamic>;

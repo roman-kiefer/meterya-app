@@ -122,6 +122,9 @@ String errorText(AppLocalizations l, String code) => switch (code) {
   'SERIAL_ALREADY_ACTIVE' => l.serialAlreadyActive,
   'RESOURCE_NOT_FOUND' => l.settingsUnavailable,
   'TARIFF_OVERLAP' => l.tariffOverlap,
+  'INVALID_ADVANCE_PAYMENT' => l.invalidAdvancePayment,
+  'ADVANCE_PAYMENT_DUPLICATE' => l.advancePaymentDuplicate,
+  'ADVANCE_PAYMENTS_UNSUPPORTED' => l.advancePaymentsUnsupported,
   _ => l.genericError,
 };
 String registerName(AppLocalizations l, Register register) =>

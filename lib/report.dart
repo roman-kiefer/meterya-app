@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'l10n/app_localizations.dart';
 import 'models.dart';
+import 'advance_payment_view.dart' show balanceLabel;
 
 enum ReportFormat { html, json }
 
@@ -93,6 +94,10 @@ class BillingReport {
     'currency': 'EUR',
     'base_cents': summary.baseCents,
     'net_cents': summary.netCents,
+    if (summary.advancePaymentCents != null) ...{
+      'advance_payment_cents': summary.advancePaymentCents,
+      'estimated_balance_cents': summary.estimatedBalanceCents,
+    },
     'positions': [
       for (final p in summary.positions)
         {
@@ -211,6 +216,15 @@ class BillingReport {
               : l.partialCosts,
           money(summary.netCents),
         ],
+        if (summary.advancePaymentCents != null) ...[
+          [l.advancePaid, money(summary.advancePaymentCents)],
+          [
+            balanceLabel(l, summary.estimatedBalanceCents),
+            summary.estimatedBalanceCents == null
+                ? money(null)
+                : money(summary.estimatedBalanceCents!.replaceFirst('-', '')),
+          ],
+        ],
       ],
     );
     final tariffRows = table(
@@ -313,6 +327,7 @@ ${summary.warnings.isEmpty ? '' : '<ul>${summary.warnings.map((code) => '<li>${e
 <h2>${e(l.reportConsumption)}</h2>$quantities
 <h2>${e(l.reportCosts)}</h2>$costs
 <p class="note">${e(l.billingRounding)}</p>
+${summary.advancePaymentCents == null ? '' : '<p class="note">${e(l.advanceEstimateNotice)}</p>'}
 <h2>${e(l.reportTariffs)}</h2>${prices.isEmpty ? '<p>${e(l.noTariffs)}</p>' : tariffRows}
 ${point.isVirtual ? '<h2>${e(l.virtualPeriods)}</h2>$derivedRows${point.isVirtualHeat ? '<p>${e(l.virtualGridCostsHelp)}</p>' : ''}' : ''}
 <h2>${e(l.reportSources)}</h2><p class="note">${e(l.reportSourcesHelp)}</p>${readings.isEmpty ? '<p>${e(l.noReadings)}</p>' : sourceRows}

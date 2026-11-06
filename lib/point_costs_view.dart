@@ -1,3 +1,4 @@
+import 'advance_payment_view.dart';
 import 'report_actions.dart';
 import 'main.dart' show errorText;
 import 'package:flutter/material.dart';
@@ -56,6 +57,8 @@ class PointCostsView extends StatelessWidget {
               }),
             ),
           MonthlyOverviewView(point: point, summary: summary, year: year),
+          if (summary?.advancePaymentCents != null)
+            AdvanceBalanceCard(summary: summary!),
           if (summary != null && model.workspace != null)
             ReportActions(
               workspace: model.workspace!,
